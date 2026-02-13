@@ -53,10 +53,15 @@ public class NoteController {
          return ResponseEntity.ok().body(Map.of("message","All notes Deleted Successfully"));
     }
 
+    //edit Note
     @PutMapping("/note/{noteId}")
     public ResponseEntity<?> updateNote(@RequestBody UpdateNoteRequest request, @PathVariable int noteId) {
             noteService.updateNote(request, noteId);
             return ResponseEntity.ok().body(Map.of("message" , "note updated Successfully"));
     }
 
+    @GetMapping("/note/search")
+    public ResponseEntity<List<NoteResponse>> searchByKeyword(@RequestParam String keyword) {
+        return noteService.searchByKeyword(keyword);
+    }
 }

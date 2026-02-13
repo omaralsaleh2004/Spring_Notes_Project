@@ -112,4 +112,26 @@ public class NoteService {
 
         noteRepo.save(note);
     }
+
+
+    public ResponseEntity<List<NoteResponse>> searchByKeyword(String keyword) {
+        User user = authService.getCurrentUser();
+        if(user == null) {
+            throw new UnauthorizedException("UnAuthorized");
+        }
+        List<Note> notes = noteRepo.findByUser(user);
+
+        if(notes.isEmpty()) {
+            throw new NotFoundException("No Notes Found");
+        }
+       List<NoteResponse> filtered = notes.stream()
+               .filter(note -> note.getTitle().toLowerCase().contains(keyword.toLowerCase()) || note.getDescription().toLowerCase().contains(keyword.toLowerCase()))
+               .map(note -> new NoteResponse(note.getId() , note.getTitle(),note.getDescription()))
+               .toList();
+
+        if(filtered.isEmpty()) {
+            throw new NotFoundException("No Notes Match The Keyword");
+        }
+        return ResponseEntity.ok().body(filtered);
+    }
 }
