@@ -64,4 +64,8 @@ public class NoteController {
     public ResponseEntity<List<NoteResponse>> searchByKeyword(@RequestParam String keyword) {
         return noteService.searchByKeyword(keyword);
     }
+    @PutMapping("/note/{noteId}/status")
+    public ResponseEntity<NoteResponse> updateNoteStatus (@PathVariable int noteId) {
+        return noteService.updateNoteStatus(noteId);
+    }
 }
